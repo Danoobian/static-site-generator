@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -60,6 +60,31 @@ class TestHTMLNode(unittest.TestCase):
         test_props = None
         node = LeafNode(test_tag, test_val, test_props)
         self.assertEqual(node.to_html(), f"<{test_tag}>{test_val}</{test_tag}>")
+
+    def test_to_html_with_children(self):
+        child_node = LeafNode("span", "child")
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(parent_node.to_html(), "<div><span>child</span></div>")
+
+    def test_to_html_with_grandchildren(self):
+        grandchild_node = LeafNode("b", "grandchild")
+        child_node = ParentNode("span", [grandchild_node])
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(
+            parent_node.to_html(),
+            "<div><span><b>grandchild</b></span></div>",
+        )
+
+    def test_notag_parentnode(self):
+        child_node = LeafNode("span", "child")
+        parent_node = ParentNode(None, [child_node])
+        with self.assertRaisesRegex(ValueError, "parent node must have tag"):
+            parent_node.to_html()
+
+    def test_nochildren_parentnode(self):
+        parent_node = ParentNode("p", None)
+        with self.assertRaisesRegex(ValueError, "parent node must have children"):
+            parent_node.to_html()
 
 
 if __name__ == "__main__":

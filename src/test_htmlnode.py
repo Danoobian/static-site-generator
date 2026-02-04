@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -29,11 +29,37 @@ class TestHTMLNode(unittest.TestCase):
         self.assertEqual(node.props_to_html(), "")
 
     def test_init(self):
-        node = HTMLNode("p", "this is a pragraph")
+        test_tag = "p"
+        test_val = "this is a pragraph"
+        node = HTMLNode(test_tag, test_val)
         self.assertTrue(str(node) is not None)
         self.assertTrue(str(node) != "")
-        self.assertEqual(node.tag, "p")
-        self.assertEqual(node.value, "this is a pragraph")
+        self.assertEqual(node.tag, test_tag)
+        self.assertEqual(node.value, test_val)
+
+    def test_emptyval_leafnode(self):
+        node = LeafNode("p", None)
+        with self.assertRaises(ValueError):
+            node.to_html()
+
+    def test_emptytag_leafnode(self):
+        test_val = "test text here"
+        node = LeafNode(None, test_val)
+        self.assertEqual(node.to_html(), test_val)
+
+    def test_to_html_leafnode(self):
+        test_tag = "a"
+        test_val = "Boot.dev"
+        test_props = {"href": "https://www.boot.dev"}
+        node = LeafNode(test_tag, test_val, test_props)
+        self.assertEqual(node.to_html(), '<a href="https://www.boot.dev">Boot.dev</a>')
+
+    def test_emptyprops_leafnode(self):
+        test_tag = "p"
+        test_val = "this is a pragraph"
+        test_props = None
+        node = LeafNode(test_tag, test_val, test_props)
+        self.assertEqual(node.to_html(), f"<{test_tag}>{test_val}</{test_tag}>")
 
 
 if __name__ == "__main__":

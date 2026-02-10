@@ -1,5 +1,5 @@
 from htmlnode import LeafNode
-from textnode import TextType
+from textnode import TextNode, TextType
 
 
 def text_node_to_html_node(text_node):
@@ -18,3 +18,22 @@ def text_node_to_html_node(text_node):
             return LeafNode("a", text_node.text, {"href": text_node.url})
         case TextType.IMAGE:
             return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
+
+
+def split_nodes_delimiter(old_nodes, delimiter, text_type):
+    new_nodes = []
+    for old_node in old_nodes:
+        if old_node.text_type != TextType.TEXT:
+            new_nodes.append(old_node)
+        elif old_node.text.count(delimiter) % 2 != 0:
+            raise ValueError("unbalanced delimiters")
+        else:
+            parts = old_node.text.split(delimiter)
+            for idx in range(len(parts)):
+                if parts[idx] == "":
+                    continue
+                elif idx % 2:  # odd index --> True
+                    new_nodes.append(TextNode(parts[idx], text_type))
+                else:
+                    new_nodes.append(TextNode(parts[idx], TextType.TEXT))
+    return new_nodes

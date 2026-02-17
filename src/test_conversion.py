@@ -106,6 +106,10 @@ class TestConversion(unittest.TestCase):
         text = "This text contains no images"
         self.assertEqual(extract_markdown_images(text), [])
 
+    def test_nested_image_extraction(self):
+        text = "This is text with a ![rick[ roll]](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com(/fJRm4Vk.jpeg))"
+        self.assertEqual(extract_markdown_images(text), [])
+
     def test_link_extraction(self):
         text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
         expected_results = [
@@ -121,6 +125,14 @@ class TestConversion(unittest.TestCase):
 
     def test_none_link_extraction(self):
         text = "This text contains no links"
+        self.assertEqual(extract_markdown_links(text), [])
+
+    def test_image_link_extraction(self):
+        text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        self.assertEqual(extract_markdown_links(text), [])
+
+    def test_nested_link_extraction(self):
+        text = "This is text with a link [to boot[ dev]](https://www.boot.dev) and [to youtube](https://www.youtube.com/(@bootdotdev))"
         self.assertEqual(extract_markdown_links(text), [])
 
 

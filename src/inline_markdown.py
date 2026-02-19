@@ -5,6 +5,9 @@ from textnode import TextNode, TextType
 
 
 def text_to_textnodes(text):
+    """
+    Converts text to TextNodes
+    """
     new_nodes = [TextNode(text, TextType.TEXT)]
     new_nodes = split_nodes_image(new_nodes)
     new_nodes = split_nodes_link(new_nodes)
@@ -15,6 +18,9 @@ def text_to_textnodes(text):
 
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
+    """
+    Splits Text nodes based on the given delimiter.s
+    """
     new_nodes = []
     for old_node in old_nodes:
         if old_node.text_type != TextType.TEXT:
@@ -34,6 +40,9 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
 
 def split_nodes_link(old_nodes):
+    """
+    Split nodes around links.
+    """
     new_nodes = []
     for old_node in old_nodes:
         text = old_node.text
@@ -57,6 +66,9 @@ def split_nodes_link(old_nodes):
 
 
 def split_nodes_image(old_nodes):
+    """
+    Split nodes around image references.
+    """
     new_nodes = []
     for old_node in old_nodes:
         text = old_node.text
@@ -80,8 +92,14 @@ def split_nodes_image(old_nodes):
 
 
 def extract_markdown_images(text):
+    """
+    Extract image alt text and link from Markdown.
+    """
     return re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
 
 
 def extract_markdown_links(text):
+    """
+    Extract alt text and link from Markdown.
+    """
     return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)

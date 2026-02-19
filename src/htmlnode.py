@@ -1,4 +1,8 @@
 class HTMLNode:
+    """
+    Represents a Markdown node.
+    """
+
     def __init__(self, tag=None, value=None, children=None, props=None):
         self.tag = tag
         self.value = value
@@ -21,6 +25,10 @@ class HTMLNode:
 
 
 class LeafNode(HTMLNode):
+    """
+    Represents an HTML end node.
+    """
+
     def __init__(self, tag, value, props=None):
         super().__init__(tag, value, None, props)
 
@@ -36,6 +44,10 @@ class LeafNode(HTMLNode):
 
 
 class ParentNode(HTMLNode):
+    """
+    Represents HTML parent node.
+    """
+
     def __init__(self, tag, children, props=None):
         super().__init__(tag, None, children, props)
 

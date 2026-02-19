@@ -4,6 +4,10 @@ from htmlnode import LeafNode
 
 
 class TextType(Enum):
+    """
+    Defines Markdown types.
+    """
+
     TEXT = "text"
     BOLD = "bold"
     ITALIC = "italic"
@@ -13,6 +17,10 @@ class TextType(Enum):
 
 
 class TextNode:
+    """
+    Represents a Markdown text node.
+    """
+
     def __init__(self, text, text_type, url=None):
         self.text = text
         self.text_type = text_type
@@ -30,6 +38,9 @@ class TextNode:
 
 
 def text_node_to_html_node(text_node):
+    """
+    Converts text node into a HTML node.
+    """
     if text_node.text_type not in TextType:
         raise ValueError("wrong text type in conversion")
     match text_node.text_type:
